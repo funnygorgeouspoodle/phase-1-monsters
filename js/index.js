@@ -57,18 +57,15 @@ const postNewMonster = ({name, age, description}) => {
         body: JSON.stringify({name, age, description})
     })
     .then(resp => resp.json())
-    .then(monster => console.log(monster))
-
+    .then(monster => {
+        addOneMonster(monster)
+        event.target.reset() 
+    })    
 }
 
 
 
-
-
-
-
 const fetchMonster = () => {
-let monsterContainer = document.querySelector('#monster-container')
 fetch("http://localhost:3000/monsters/?_limit=20&_page=1") // first promise
     .then(resp => resp.json())
     .then(monsterData => {
@@ -76,20 +73,24 @@ fetch("http://localhost:3000/monsters/?_limit=20&_page=1") // first promise
         monsterData.forEach((monster) => {
             // we need to show the age, description, name
             
-            let card = document.createElement('div')
-            let name = document.createElement("h2")
-            let age = document.createElement('h4')
-            let description = document.createElement('p')
-
-            name.innerText = monster.name
-            age.innerText = `Age: ${monster.age}`
-            description.innerText = `Bio: ${monster.description}`
-            
-            
-            card.append(name, age, description)
-            monsterContainer.append(card)
+            addOneMonster(monster)
         })
     })
 
 }
+const addOneMonster = (monster) => {
+    let monsterContainer = document.querySelector('#monster-container')
 
+    let card = document.createElement('div')
+    let name = document.createElement("h2")
+    let age = document.createElement('h4')
+    let description = document.createElement('p')
+
+    name.innerText = monster.name
+    age.innerText = `Age: ${monster.age}`
+    description.innerText = `Bio: ${monster.description}`
+    
+    
+    card.append(name, age, description)
+    monsterContainer.append(card)
+}
